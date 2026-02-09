@@ -35,6 +35,13 @@ namespace PolicyManagementSystem.Controllers
         {
             var userId = int.Parse(
                 User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+            
+            var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+            
+            if (userRole == "Admin")
+            {
+                throw new Exceptions.ForbiddenException("Admins cannot enroll in policies");
+            }
 
             await _policyService.EnrollUserAsync(userId, policyId);
             return Ok("Enrollment requested successfully");

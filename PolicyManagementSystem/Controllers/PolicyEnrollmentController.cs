@@ -37,7 +37,8 @@ namespace PolicyManagementSystem.Controllers
         [HttpGet("admin/enrollments")]
         public async Task<IActionResult> GetEnrollments([FromQuery] string? status = null)
         {
-            if (status == "Pending")
+            if (!string.IsNullOrEmpty(status) && 
+                status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
             {
                 return Ok(await _service.GetPendingEnrollmentsAsync());
             }
